@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classic Mods Revived</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- VARIABLES --- */
+        :root {
+            --bg-color: #050505;
+            --card-bg: #121212;
+            --text-main: #ffffff;
+            --text-muted: #a1a1aa;
+            --accent-gradient: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+            --glow: 0 0 80px -20px rgba(37, 99, 235, 0.3);
+            --card-border: rgba(255, 255, 255, 0.05);
+            --card-border-hover: rgba(37, 99, 235, 0.5);
+        }
+
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* --- ANIMATIONS (Scroll Reveal) --- */
+        .hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- HEADER / HERO --- */
+        header {
+            min-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 2rem;
+            overflow: hidden;
+        }
+
+        /* Fluidity Mask */
+        header::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            height: 150px;
+            background: linear-gradient(to bottom, transparent, var(--bg-color));
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        /* Background Blob */
+        .bg-blob {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            background: var(--accent-gradient);
+            filter: blur(140px);
+            opacity: 0.2;
+            border-radius: 50%;
+            z-index: -1;
+            animation: pulse 12s infinite alternate;
+            mix-blend-mode: screen;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.15; }
+            100% { transform: scale(1.1); opacity: 0.25; }
+        }
+
+        /* --- WARP SPEED STAR EFFECT --- */
+        .star-field {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 1px;
+            height: 1px;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .star-wrapper {
+            position: absolute;
+            top: 0; left: 0;
+            transform-origin: 0 0;
+        }
+
+        .shooting-star {
+            position: absolute;
+            top: 0; left: 0;
+            height: 2px;
+            width: 250px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,1));
+            border-radius: 999px;
+            transform: translateX(0);
+            opacity: 0;
+            animation: warp 5s linear infinite;
+        }
+
+        /* 16 Star Config (Slow & Steady) */
+        .star-wrapper:nth-child(1) { transform: rotate(0deg); }
+        .star-wrapper:nth-child(1) .shooting-star { animation-delay: 0s; animation-duration: 4.5s; }
+        .star-wrapper:nth-child(2) { transform: rotate(90deg); }
+        .star-wrapper:nth-child(2) .shooting-star { animation-delay: 0.5s; animation-duration: 5.2s; }
+        .star-wrapper:nth-child(3) { transform: rotate(180deg); }
+        .star-wrapper:nth-child(3) .shooting-star { animation-delay: 1.0s; animation-duration: 4.8s; }
+        .star-wrapper:nth-child(4) { transform: rotate(270deg); }
+        .star-wrapper:nth-child(4) .shooting-star { animation-delay: 1.5s; animation-duration: 5.5s; }
+        .star-wrapper:nth-child(5) { transform: rotate(45deg); }
+        .star-wrapper:nth-child(5) .shooting-star { animation-delay: 2.0s; animation-duration: 4.2s; }
+        .star-wrapper:nth-child(6) { transform: rotate(135deg); }
+        .star-wrapper:nth-child(6) .shooting-star { animation-delay: 2.5s; animation-duration: 5.0s; }
+        .star-wrapper:nth-child(7) { transform: rotate(225deg); }
+        .star-wrapper:nth-child(7) .shooting-star { animation-delay: 0.2s; animation-duration: 4.6s; }
+        .star-wrapper:nth-child(8) { transform: rotate(315deg); }
+        .star-wrapper:nth-child(8) .shooting-star { animation-delay: 0.7s; animation-duration: 5.8s; }
+        .star-wrapper:nth-child(9) { transform: rotate(22.5deg); }
+        .star-wrapper:nth-child(9) .shooting-star { animation-delay: 3.0s; animation-duration: 4.9s; }
+        .star-wrapper:nth-child(10) { transform: rotate(67.5deg); }
+        .star-wrapper:nth-child(10) .shooting-star { animation-delay: 1.2s; animation-duration: 5.1s; }
+        .star-wrapper:nth-child(11) { transform: rotate(112.5deg); }
+        .star-wrapper:nth-child(11) .shooting-star { animation-delay: 3.5s; animation-duration: 4.4s; }
+        .star-wrapper:nth-child(12) { transform: rotate(157.5deg); }
+        .star-wrapper:nth-child(12) .shooting-star { animation-delay: 1.8s; animation-duration: 5.3s; }
+        .star-wrapper:nth-child(13) { transform: rotate(202.5deg); }
+        .star-wrapper:nth-child(13) .shooting-star { animation-delay: 0.3s; animation-duration: 4.7s; }
+        .star-wrapper:nth-child(14) { transform: rotate(247.5deg); }
+        .star-wrapper:nth-child(14) .shooting-star { animation-delay: 2.8s; animation-duration: 5.6s; }
+        .star-wrapper:nth-child(15) { transform: rotate(292.5deg); }
+        .star-wrapper:nth-child(15) .shooting-star { animation-delay: 1.1s; animation-duration: 4.3s; }
+        .star-wrapper:nth-child(16) { transform: rotate(337.5deg); }
+        .star-wrapper:nth-child(16) .shooting-star { animation-delay: 3.2s; animation-duration: 5.4s; }
+
+        @keyframes warp {
+            0% { transform: translateX(250px) scaleX(0.5); opacity: 0; }
+            5% { opacity: 1; }
+            100% { transform: translateX(1500px) scaleX(1); opacity: 1; }
+        }
+
+        /* --- HERO CONTENT --- */
+        .hero-logo {
+            width: 140px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 30px rgba(37, 99, 235, 0.4));
+            animation: float 6s ease-in-out infinite;
+            z-index: 2;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            letter-spacing: -2px;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            z-index: 2;
+        }
+
+        .tagline {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            z-index: 2;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 40px;
+            animation: bounce 2s infinite;
+            opacity: 0.5;
+            z-index: 6;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-10px);}
+            60% {transform: translateY(-5px);}
+        }
+
+        /* --- PROJECTS GRID --- */
+        .projects-section {
+            padding: 100px 0;
+            position: relative;
+            z-index: 10;
+            background: var(--bg-color);
+        }
+
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            border-left: 4px solid #2563eb;
+            padding-left: 1rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        /* --- CARD STYLING --- */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        border-color 0.4s ease,
+                        box-shadow 0.4s ease;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 350px;
+            transform-style: preserve-3d;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            border-color: var(--card-border-hover);
+            box-shadow: var(--glow);
+        }
+
+        /* Parallax Layer */
+        .card::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.08;
+            z-index: 0;
+            filter: grayscale(100%) contrast(120%);
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.4s ease;
+            will-change: transform, opacity;
+        }
+
+        .card:hover::after {
+            opacity: 0.15;
+            transform: scale(1.15);
+        }
+
+        .card-jurassic::after { background-image: url('jurassic_logo.png'); }
+        .card-controller::after { background-image: url('controller_logo.png'); }
+
+        /* --- CARD CONTENT --- */
+        .card-content {
+            position: relative;
+            z-index: 2;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h3 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            color: #fff;
+        }
+
+        .card p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .tag-mc { background: rgba(37, 99, 235, 0.2); color: #60a5fa; }
+        .tag-future { background: rgba(255, 255, 255, 0.1); color: #94a3b8; border: 1px dashed #555; }
+
+        /* --- STATS & LINKS --- */
+        .card-footer {
+            margin-top: auto;
+        }
+
+        .stats-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding-bottom: 10px;
+        }
+
+        .download-icon {
+            width: 14px;
+            height: 14px;
+        }
+
+        .link-group {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-link {
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--text-muted); /* Default color */
+        }
+
+        .btn-link:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.2);
+        }
+
+        /* Specific Link Colors */
+        .link-gh { color: #fff; }
+        .link-cf { color: #f16436; }
+        .link-mr { color: #1bd96a; }
+
+
+        /* --- FOOTER --- */
+        footer {
+            padding: 50px 0;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            margin-top: 50px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* --- MOBILE --- */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .hero-logo { width: 100px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="bg-blob"></div>
+        <div class="star-field">
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+            <div class="star-wrapper"><div class="shooting-star"></div></div>
+        </div>
+
+        <div class="container hidden">
+            <img src="cmr_logo.png" alt="Classic Mods Revived" class="hero-logo">
+            <p style="color: #3b82f6; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px;">ORGANIZATION</p>
+            <h1>Classic Mods Revived</h1>
+            <p class="tagline">Resurrecting the golden age of gameplay with modern engineering. Currently crafting experiences for Minecraft.</p>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg>
+        </div>
+    </header>
+
+    <main class="container projects-section">
+        <h2 class="section-title hidden">Our Projects</h2>
+
+        <div class="grid">
+            <article class="card card-jurassic hidden">
+                <div class="card-content">
+                    <div>
+                        <span class="tag tag-mc">Minecraft Mod</span>
+                        <br><br>
+                        <h3>Jurassic Revived</h3>
+                        <p>Bringing the prehistoric era back to life. A comprehensive overhaul adding scientifically accurate dinosaurs, fossils, and DNA extraction mechanics.</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="stats-row">
+                            <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span id="dl-jurassic">Loading Stats...</span>
+                        </div>
+                        <div class="link-group">
+                            <a href="https://github.com/classic-mods-revived/Jurassic-Revived" class="btn-link link-gh">GitHub &rarr;</a>
+                            <a href="https://www.curseforge.com/minecraft/mc-mods/jurassic-revived" class="btn-link link-cf">CurseForge &rarr;</a>
+                            <a href="https://modrinth.com/mod/jurassic-revived" class="btn-link link-mr">Modrinth &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card card-controller hidden">
+                <div class="card-content">
+                    <div>
+                        <span class="tag tag-mc">Minecraft Tool</span>
+                        <br><br>
+                        <h3>Mod Controller</h3>
+                        <p>Total control over your modpack. Manage configs, resolve conflicts, and optimize performance with our sleek in-game interface.</p>
+                    </div>
+
+                    <div class="card-footer">
+                        <div class="stats-row">
+                            <svg class="download-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            <span id="dl-controller">Loading Stats...</span>
+                        </div>
+                        <div class="link-group">
+                            <a href="https://github.com/classic-mods-revived/Mod-Controller" class="btn-link link-gh">GitHub &rarr;</a>
+                            <a href="https://www.curseforge.com/minecraft/mc-mods/modcontroller" class="btn-link link-cf">CurseForge &rarr;</a>
+                            <a href="https://modrinth.com/mod/modcontroller" class="btn-link link-mr">Modrinth &rarr;</a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card hidden" style="border-style: dashed; justify-content: center; align-items: center; text-align: center;">
+                <div class="card-content" style="align-items: center; width: 100%; justify-content: center;">
+                    <span class="tag tag-future">In Concept</span>
+                    <br><br>
+                    <h3 style="color: #555;">Project X</h3>
+                    <p>We are currently brainstorming our next venture into other game ecosystems. Stay tuned for announcements.</p>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Classic Mods Revived. Built for the community.</p>
+        </div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        });
+
+        const hiddenElements = document.querySelectorAll('.hidden');
+        hiddenElements.forEach((el) => observer.observe(el));
+    </script>
+
+    <script>
+        // --- ⬇️ CONFIGURATION AREA ⬇️ ---
+        // I have updated these based on your HTML Links!
+        const projects = [
+            {
+                elementId: 'dl-jurassic',
+                modrinthSlug: 'jurassic-revived',
+                curseforgeSlug: 'jurassic-revived' // UPDATED: removed '-example'
+            },
+            {
+                elementId: 'dl-controller',
+                modrinthSlug: 'modcontroller',
+                curseforgeSlug: 'modcontroller'  // UPDATED: removed '-example'
+            }
+        ];
+        // --- ⬆️ END CONFIGURATION ⬆️ ---
+
+        async function fetchStats() {
+            projects.forEach(async (proj) => {
+                let totalDownloads = 0;
+                let mrDownloads = 0;
+                let cfDownloads = 0;
+                const element = document.getElementById(proj.elementId);
+
+                // 1. Fetch Modrinth
+                if(proj.modrinthSlug) {
+                    try {
+                        const mrResponse = await fetch(`https://api.modrinth.com/v2/project/${proj.modrinthSlug}`);
+                        if (mrResponse.ok) {
+                            const mrData = await mrResponse.json();
+                            mrDownloads = mrData.downloads;
+                        } else {
+                            console.log(`Modrinth: ${proj.modrinthSlug} not found.`);
+                        }
+                    } catch (e) {
+                        console.log('Error fetching Modrinth:', e);
+                    }
+                }
+
+                // 2. Fetch CurseForge (via cfwidget.com proxy)
+                if(proj.curseforgeSlug) {
+                    try {
+                        const cfResponse = await fetch(`https://api.cfwidget.com/minecraft/mc-mods/${proj.curseforgeSlug}`);
+                        if (cfResponse.ok) {
+                            const cfData = await cfResponse.json();
+                            cfDownloads = cfData.downloads.total;
+                        } else {
+                            console.log(`CurseForge: ${proj.curseforgeSlug} not found.`);
+                        }
+                    } catch (e) {
+                        console.log('Error fetching CurseForge:', e);
+                    }
+                }
+
+                // 3. Update DOM
+                totalDownloads = mrDownloads + cfDownloads;
+
+                if (totalDownloads > 0) {
+                    element.innerText = new Intl.NumberFormat().format(totalDownloads) + " Downloads";
+                    element.style.color = "#fff";
+                } else {
+                    element.innerText = "0 Downloads (or Pending)";
+                    element.style.color = "#555";
+                }
+            });
+        }
+
+        fetchStats();
+    </script>
+</body>
+</html>
